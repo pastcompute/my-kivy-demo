@@ -61,7 +61,9 @@ class Layout1Screen(SwipeBehavior, Screen):
 #      self.sm.transition = tx
 
 class Layout2Screen(Screen):
-    pass
+  sm = ObjectProperty()
+
+# Next: a vertical layout that preserves the individual size of its things
 
 class LayoutDemoApp(App):
 
