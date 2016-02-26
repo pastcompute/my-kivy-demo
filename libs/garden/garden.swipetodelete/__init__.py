@@ -230,6 +230,9 @@ class SwipeBehavior(object):
         super(SwipeBehavior, self).on_touch_down(touch)
         return
 
+    def on_remove_widget(self):
+        self.parent.remove_widget(self)
+
     def check_for_left(self):
         '''
         Delete the widget when on_touch_up method is called and the widget is
@@ -239,7 +242,7 @@ class SwipeBehavior(object):
             if (((self.x+self.width) - self.parent.x) / self.width
                             ) * 100 <= self.left_percentage:
                 if self.remove_from_left:
-                    self.parent.remove_widget(self)
+                    self.on_remove_widget()
             else:
                 self.get_widget_back()
                 self.animate_back()
@@ -255,7 +258,7 @@ class SwipeBehavior(object):
             if ((self.parent.width - self.x) / self.width
                         ) * 100 <= self.right_percentage:
                 if self.remove_from_right:
-                    self.parent.remove_widget(self)
+                    self.on_remove_widget()
             else:
                 self.get_widget_back()
                 self.animate_back()

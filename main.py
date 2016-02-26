@@ -2,7 +2,7 @@ import kivy
 from kivy.app import App
 from kivy.clock import Clock
 from kivy.properties import *
-from kivy.uix.screenmanager import ScreenManager, Screen
+from kivy.uix.screenmanager import *
 from kivy.uix.widget import Widget
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.boxlayout import BoxLayout
@@ -17,7 +17,7 @@ kivy.require('1.9.0')
 # 4. On Android, not reloading after you move off
 # 5. Effective use of Inheritence + Composition in kv
 # 6. Borders on labels
-# 7. C8lours of buttons
+# 7. Colours of buttons
 # 8. Font sizes
 
 class SimpleBackground(Widget):
@@ -29,6 +29,7 @@ class FirstScreen(Screen):
   pass
 
 class Layout1Screen(SwipeBehavior, Screen):
+  sm = ObjectProperty()
   def on_touch_down(self, touch):
     if self.collide_point(touch.x, touch.y):
       self.move_to = self.x,self.y
@@ -47,6 +48,20 @@ class Layout1Screen(SwipeBehavior, Screen):
       self.check_for_left()
       self.check_for_right()
       return super(Layout1Screen, self).on_touch_up(touch)
+
+  def on_remove_widget(self):
+      print "Remove me here!"
+      # We need to suppress the transition animation now
+      # and do it in the direction of the swipe instead
+      # TODO: code to find next sibling, etc, etc.
+      # TODO: get to app? self.app.sm.current = 'layout2'
+      tx = self.sm.transition
+      self.sm.transition = NoTransition()
+      self.sm.current = 'layout2'
+#      self.sm.transition = tx
+
+class Layout2Screen(Screen):
+    pass
 
 class LayoutDemoApp(App):
 
@@ -68,8 +83,9 @@ class LayoutDemoApp(App):
     print "build"
     self.title = 'Layouts Demo'
     sm = ScreenManager()
-    sm.add_widget(FirstScreen(name='layout0'))
-    sm.add_widget(Layout1Screen(name='layout1'))
+    sm.add_widget(FirstScreen(name='layout0', sm=sm))
+    sm.add_widget(Layout1Screen(name='layout1', sm=sm))
+    sm.add_widget(Layout2Screen(name='layout2', sm=sm))
     Clock.schedule_once(self.first_transition, 2)
     self.sm = sm
     return sm

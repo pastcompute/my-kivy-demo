@@ -28,7 +28,11 @@
 <Label>:
     color: 0,0,1,1
 
-<Button>:
+<Button1@Button>:
+    background_normal: ''
+    background_color: 0,0.7,1,1
+
+<ButtonX>:
     canvas:
         Color:
             rgb: (1, 0, 0)
@@ -82,7 +86,15 @@
             font_size: '40sp'
             text: 'Font size: ' + str(self.font_size) + 'sp'
 
-# For slide gesture on specified direction, see:
+<Layout2Screen>:
+    SimpleBackground:
+    Button1:
+        markup: True
+        text: "[color=0000ff]Click Me![/color]"
+        pos_hint: { 'center_x':0.5, 'center_y': 0.25 }
+        size_hint: ( 0.66, 0.2 )
+
+# For alternative slide gesture on specified direction, see:
 # http://stackoverflow.com/questions/30934445/kivy-swiping-carousel-screenmanager
 # For android back key:
 # http://stackoverflow.com/questions/20090701/back-button-functionality-on-android-with-kivy  
