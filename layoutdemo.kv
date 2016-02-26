@@ -56,6 +56,8 @@
 # Font units: https://kivy.org/docs/api-kivy.metrics.html
 # Note: the value read back may differ to that set for sp depending on phone size
 <Layout1Screen>:
+    swipe_rectangle: self.x, self.y , self.width, self.height
+    swipe_timeout: 1000000
     SimpleBackground:
     BoxLayout:
         orientation: 'vertical'

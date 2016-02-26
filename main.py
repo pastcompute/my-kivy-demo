@@ -6,6 +6,7 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.widget import Widget
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.boxlayout import BoxLayout
+from kivy.garden.swipetodelete import SwipeBehavior
 
 kivy.require('1.9.0')
 
@@ -27,8 +28,25 @@ class SimpleBackground(Widget):
 class FirstScreen(Screen):
   pass
 
-class Layout1Screen(Screen):
-  pass
+class Layout1Screen(SwipeBehavior, Screen):
+  def on_touch_down(self, touch):
+    if self.collide_point(touch.x, touch.y):
+      self.move_to = self.x,self.y
+      print "L1 down %d,%d " % (self.x,self.y)
+      return super(Layout1Screen, self).on_touch_down(touch)
+  
+  def on_touch_move(self, touch):
+    if self.collide_point(touch.x, touch.y):
+      print "L1 move %d,%d " % (self.x,self.y)
+      self.reduce_opacity()
+      return super(Layout1Screen, self).on_touch_move(touch)
+  
+  def on_touch_up(self, touch):
+    if self.collide_point(touch.x, touch.y):
+      print "L1 up %d,%d" % (self.x,self.y)
+      self.check_for_left()
+      self.check_for_right()
+      return super(Layout1Screen, self).on_touch_up(touch)
 
 class LayoutDemoApp(App):
 
