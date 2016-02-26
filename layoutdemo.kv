@@ -1,0 +1,86 @@
+#:kivy 1.0.9
+
+# A base widget to fill screen with a particular colour and line border
+# Returns the canvas colour to black when done
+# Matched class needs following properties:
+#
+#  * bg_rgba
+#  * fg_rgba
+#  * border_width
+#
+<SimpleBackground>:
+    canvas.before:
+        Color:
+            rgb: self.bg_rgba
+        Rectangle:
+            size: self.size
+            pos: 0,0
+        Color:
+            rgba: self.fg_rgba
+        Line:
+            width: self.border_width
+            rectangle: (self.x, self.y, self.width, self.height)
+        Color:
+            rgb: 0,0,0
+
+# For some reason, the default label colour is white.
+# But we can override this here
+<Label>:
+    color: 0,0,1,1
+
+<Button>:
+    canvas:
+        Color:
+            rgb: (1, 0, 0)
+        Rectangle:
+            pos: self.pos
+            size: self.size
+        Rectangle:
+            pos: self.pos
+            size: self.texture_size
+            texture: self.texture
+
+# By default, the screen has an implcit FloatLayout
+# Absent other info, pos_hint & size_hint work on percentages of parent
+# For some reason, the default label colour is white.
+<FirstScreen>:
+    SimpleBackground:
+    Label:
+        text: 'Hello'
+        pos_hint: { 'center_x':0.5, 'center_y': 0.75 }
+        size_hint: ( 0.1, 0.6 )
+
+<Layout1Label@Label>:
+
+# Default box layout - notional size of all individual element is 1/Nth
+# Font units: https://kivy.org/docs/api-kivy.metrics.html
+# Note: the value read back may differ to that set for sp depending on phone size
+<Layout1Screen>:
+    SimpleBackground:
+    BoxLayout:
+        orientation: 'vertical'
+        Layout1Label:
+            text: 'Font size: ' + str(self.font_size) + ' default'
+        Layout1Label:
+            font_size: '8sp'
+            text: 'Font size: ' + str(self.font_size) + 'sp'
+        Layout1Label:
+            font_size: '12sp'
+            text: 'Font size: ' + str(self.font_size) + 'sp'
+        Layout1Label:
+            font_size: '16sp'
+            text: 'Font size: ' + str(self.font_size) + 'sp'
+        Layout1Label:
+            font_size: '20sp'
+            text: 'Font size: ' + str(self.font_size) + 'sp'
+        Layout1Label:
+            font_size: '24sp'
+            text: 'Font size: ' + str(self.font_size) + 'sp'
+        Layout1Label:
+            font_size: '40sp'
+            text: 'Font size: ' + str(self.font_size) + 'sp'
+
+# For slide gesture on specified direction, see:
+# http://stackoverflow.com/questions/30934445/kivy-swiping-carousel-screenmanager
+# For android back key:
+# http://stackoverflow.com/questions/20090701/back-button-functionality-on-android-with-kivy  
