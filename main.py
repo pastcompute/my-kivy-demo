@@ -71,6 +71,7 @@ class Layout3Screen(CommonScreen):
   def on_continue(self):
     self.uid = self.ids.uid.text
     self.pwd = self.ids.pwd.text
+    # This feels like dodgy coupling to me
     self.sm.get_screen('layout4').welcome = 'Welcome, ' + self.uid
     self.sm.current = 'layout4'
 
