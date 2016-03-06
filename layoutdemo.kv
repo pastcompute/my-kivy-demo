@@ -28,6 +28,12 @@
 <Label>:
     color: 0,0,1,1
 
+<JustBorderedLabel@Label>:
+    canvas.after:
+        Line:
+            width: 1
+            rectangle: (self.x, self.y, self.width, self.height)
+
 <BorderedLabel@Label>:
     text_size: self.size
     valign: 'middle'
@@ -62,6 +68,7 @@
         text: 'Hello'
         pos_hint: { 'center_x':0.5, 'center_y': 0.75 }
         size_hint: ( 0.1, 0.6 )
+        on_touch_move: self.parent.sm.current = 'layout1'
 
 <Layout1Label@Label>:
 
@@ -102,11 +109,69 @@
         text: "[color=0000ff]Click Me![/color]"
         pos_hint: { 'center_x':0.5, 'center_y': 0.25 }
         size_hint: ( 0.66, 0.2 )
-        on_release: self.parent.sm.current = 'layout0'
+        on_release: self.parent.sm.current = 'layout3'
     BorderedLabel:
         text: 'Bordered Label'
         pos_hint: { 'center_x':0.5, 'center_y': 0.75 }
         size_hint: ( 0.5, 0.1 )
+
+
+# Example edit form user/password where textedit height remains sane and positioned
+# It would be nice to use something like a Qt grid / form layout, but never mind
+# BoxLayouts are annoying, they force all elements to same width or height unless you set size_hint to None
+# instead of just stacking them in order
+# and things still dont work intuitively
+# Label in a box in a box: hint is % of that nested box row
+# TextInput: size_hint height None + height: self.minimum_height sets to natural height? 
+# TextInput actually has a padding within the text area
+
+<Layout3Screen>:
+    SimpleBackground:
+
+    JustBorderedLabel:
+        pos_hint: { 'center_x':0.5, 'top':1 }
+        text_size: self.size   # If text_size = self.size need to set both *align
+        valign: 'middle'
+        halign: 'center'
+        size_hint: ( 1, 0.1 )    # why is the label size 0.1 when None? ffs
+        text: 'Please login'
+
+    # This seems to always end up with a gap in spite of the size hints of its siblings
+    BoxLayout:
+        pos_hint: { 'center_x':0.5, 'top':0.9 }
+        size_hint: ( 0.9, None ) # if not set we see nothing
+        orientation: 'vertical'
+        spacing: '8dp'
+
+        # arguably we dont need labels when we have working hints
+
+        TextInput:
+            id: uid
+            size_hint: ( 1, None )
+            height: self.minimum_height
+            hint_text: 'email@example.com'
+
+        TextInput:
+            id: pwd
+            size_hint: ( 1, None )
+            height: self.minimum_height
+            hint_text: 'password'
+            password: True
+
+    Button1:
+        size_hint: ( 0.8, 0.3 )
+        pos_hint: { 'center_x':0.5, 'top':0.4 }
+        text: 'Continue'
+        on_release: root.on_continue()
+
+<Layout4Screen>:
+    SimpleBackground:
+    BorderedLabel:
+        id: welcome
+        text: root.welcome
+        pos_hint: { 'center_x':0.5, 'center_y': 0.75 }
+        size_hint: ( 0.5, 0.1 )
+        on_touch_move: self.parent.sm.current = 'layout1'
 
 # For alternative slide gesture on specified direction, see:
 # http://stackoverflow.com/questions/30934445/kivy-swiping-carousel-screenmanager

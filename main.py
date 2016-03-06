@@ -25,11 +25,13 @@ class SimpleBackground(Widget):
   fg_rgba = ListProperty((0,1,0.8,1))
   border_width = 6
 
-class FirstScreen(Screen):
+class CommonScreen(Screen):
+  sm = ObjectProperty()
+
+class FirstScreen(CommonScreen):
   pass
 
-class Layout1Screen(SwipeBehavior, Screen):
-  sm = ObjectProperty()
+class Layout1Screen(SwipeBehavior, CommonScreen):
   def on_touch_down(self, touch):
     if self.collide_point(touch.x, touch.y):
       self.move_to = self.x,self.y
@@ -60,12 +62,24 @@ class Layout1Screen(SwipeBehavior, Screen):
       self.sm.current = 'layout2'
 #      self.sm.transition = tx
 
-class Layout2Screen(Screen):
-  sm = ObjectProperty()
+class Layout2Screen(CommonScreen):
+  pass
 
-# Next: a vertical layout that preserves the individual size of its things
+class Layout3Screen(CommonScreen):
+  uid = StringProperty()
+  pwd = StringProperty()
+  def on_continue(self):
+    self.uid = self.ids.uid.text
+    self.pwd = self.ids.pwd.text
+    self.sm.get_screen('layout4').welcome = 'Welcome, ' + self.uid
+    self.sm.current = 'layout4'
+
+class Layout4Screen(CommonScreen):
+  welcome = StringProperty()
 
 class LayoutDemoApp(App):
+  uid = StringProperty()
+  pwd = StringProperty()
 
 #   def __init__(self, **kwargs):
 #        super(App, self).__init__(**kwargs)
@@ -88,7 +102,12 @@ class LayoutDemoApp(App):
     sm.add_widget(FirstScreen(name='layout0', sm=sm))
     sm.add_widget(Layout1Screen(name='layout1', sm=sm))
     sm.add_widget(Layout2Screen(name='layout2', sm=sm))
-    Clock.schedule_once(self.first_transition, 2)
+    sm.add_widget(Layout3Screen(name='layout3', sm=sm))
+    sm.add_widget(Layout4Screen(name='layout4', sm=sm))
+
+    sm.current = 'layout3'
+
+#    Clock.schedule_once(self.first_transition, 2)
     self.sm = sm
     return sm
 
